@@ -1,0 +1,7 @@
+import Link from 'next/link'
+import { DISTRICTS_BY_DIVISION } from '../../lib/districts'
+import { SUBJECTS } from '../../lib/subjects'
+
+export default function TutorFilterBar({ district, subject }: { district: string; subject: string }) {
+  return <form action="/tutors" method="get" className="grid gap-3 rounded-2xl border border-blue-100 bg-white p-4 shadow-sm md:grid-cols-[1fr_1fr_auto_auto]"><select name="district" defaultValue={district} className="min-h-11 rounded-xl border border-slate-200 px-3 outline-none focus:border-primary focus:ring-4 focus:ring-blue-100"><option value="">সব জেলা</option>{DISTRICTS_BY_DIVISION.map(({ division, districts }) => <optgroup key={division} label={division}>{districts.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</optgroup>)}</select><select name="subject" defaultValue={subject} className="min-h-11 rounded-xl border border-slate-200 px-3 outline-none focus:border-primary focus:ring-4 focus:ring-blue-100"><option value="">সব বিষয়</option>{SUBJECTS.map((item) => <option key={item}>{item}</option>)}</select><button type="submit" className="min-h-11 rounded-xl bg-primary px-5 py-2.5 font-bold text-white hover:bg-blue-800">টিউটর খুঁজুন</button><Link href="/tutors" className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 hover:bg-slate-50">ফিল্টার মুছুন</Link></form>
+}

@@ -1,0 +1,9 @@
+import Link from 'next/link'
+import { CalendarDays, MapPin } from 'lucide-react'
+import { districtLabel, formatSalary, isNewJob, relativeTime, type PublicJob, toBengaliDigits } from '../../lib/jobBoard'
+import ApplyButton from './ApplyButton'
+
+export default function JobCard({ job, applied = false }: { job: PublicJob; applied?: boolean }) {
+  const title = job.title || 'টিউশন জব'
+  return <article className="flex h-full flex-col rounded-2xl border border-blue-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className="flex items-start justify-between gap-3"><Link href={`/job-board/${job.id}`} className="min-w-0 group"><h2 className="line-clamp-2 text-lg font-bold text-blue-950 group-hover:text-primary">{title}</h2><div className="mt-3 flex flex-wrap gap-2"><span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-primary">{job.subject || 'বিষয় উল্লেখ নেই'}</span><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{job.class_level || 'লেভেল উল্লেখ নেই'}</span></div></Link>{isNewJob(job.created_at) && <span className="shrink-0 rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-700">নতুন</span>}</div><div className="mt-5 space-y-3 text-sm text-slate-600"><p className="flex items-center gap-2"><MapPin size={17} className="shrink-0 text-primary" />{districtLabel(job.district)}{job.locality && <span className="truncate">· {job.locality}</span>}</p><p className="w-fit rounded-full bg-amber-50 px-3 py-1 font-bold text-amber-700">{formatSalary(job.salary)}</p><p className="flex items-center gap-2"><CalendarDays size={17} className="text-primary" />সপ্তাহে {toBengaliDigits(job.days_per_week ?? '—')} দিন <span className="text-slate-400">· {relativeTime(job.created_at)}</span></p></div><div className="mt-auto pt-6"><ApplyButton jobId={job.id} title={title} applied={applied} /></div></article>
+}

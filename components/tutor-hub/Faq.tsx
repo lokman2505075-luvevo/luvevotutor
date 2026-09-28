@@ -1,0 +1,20 @@
+"use client"
+
+import Link from 'next/link'
+import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
+
+const questions = [
+  { question: 'কীভাবে টিউটর খুঁজব?', answer: <>আপনার প্রয়োজন অনুযায়ী <Link href="/tutors" className="font-bold text-primary underline underline-offset-2">টিউটর খুঁজুন</Link> পেজে বিষয় ও জেলা বেছে নিয়ে প্রোফাইল দেখুন।</> },
+  { question: 'কীভাবে টিউশন পোস্ট করব?', answer: <>আপনার প্রয়োজনের তথ্য দিয়ে <Link href="/post-tuition" className="font-bold text-primary underline underline-offset-2">টিউশন পোস্ট করুন</Link> ফর্ম পূরণ করুন। পোস্ট যাচাই ও প্রকাশের পর টিউটররা আবেদন করতে পারবেন।</> },
+  { question: 'টিউটর হিসেবে কীভাবে যুক্ত হব?', answer: <>আপনার তথ্য দিয়ে <Link href="/tutor-hub" className="font-bold text-primary underline underline-offset-2">টিউটর হিসেবে যুক্ত হোন</Link> পেজে আবেদন পাঠান। যাচাইয়ের পর আপনার প্রোফাইল প্রকাশ করা হয়।</> },
+  { question: 'পেমেন্ট কীভাবে করব?', answer: 'বর্তমান ভার্সনে Luvevo Tutor-এ অনলাইন পেমেন্ট মডিউল নেই। পেমেন্ট বা লেনদেনের বিষয়ে নির্দিষ্ট তথ্যের জন্য আমাদের সঙ্গে যোগাযোগ করুন।' },
+  { question: 'আমার তথ্য কি সবার কাছে দেখা যায়?', answer: 'না। ফোন নম্বর প্রকাশ্যে দেখানো হয় না। প্রাসঙ্গিক প্রোফাইল তথ্য দেখানো হতে পারে, আর Luvevo উভয় পক্ষকে সংযুক্ত করতে সহায়তা করে।' },
+  { question: 'সাপোর্ট কীভাবে পাব?', answer: <>আপনার প্রশ্ন বা সহায়তার প্রয়োজন জানাতে <Link href="/contact" className="font-bold text-primary underline underline-offset-2">যোগাযোগ করুন</Link> পেজের ফর্ম ব্যবহার করুন।</> },
+]
+
+export default function Faq() {
+  const [open, setOpen] = useState<number | null>(null)
+  const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: typeof item.answer === 'string' ? item.answer : item.question === 'কীভাবে টিউটর খুঁজব?' ? 'আপনার প্রয়োজন অনুযায়ী টিউটর খুঁজুন পেজে বিষয় ও জেলা বেছে নিয়ে প্রোফাইল দেখুন।' : item.question === 'কীভাবে টিউশন পোস্ট করব?' ? 'আপনার প্রয়োজনের তথ্য দিয়ে টিউশন পোস্ট করুন ফর্ম পূরণ করুন। পোস্ট যাচাই ও প্রকাশের পর টিউটররা আবেদন করতে পারবেন।' : item.question === 'টিউটর হিসেবে কীভাবে যুক্ত হব?' ? 'আপনার তথ্য দিয়ে টিউটর হিসেবে যুক্ত হোন পেজে আবেদন পাঠান। যাচাইয়ের পর আপনার প্রোফাইল প্রকাশ করা হয়।' : 'আপনার প্রশ্ন বা সহায়তার প্রয়োজন জানাতে যোগাযোগ করুন পেজের ফর্ম ব্যবহার করুন।' } })) }
+  return <section className="px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="faq-heading"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} /><div className="mx-auto max-w-3xl"><div className="text-center"><p className="font-bold text-amber-600">সাধারণ জিজ্ঞাসা</p><h2 id="faq-heading" className="mt-2 text-3xl font-bold text-blue-950 sm:text-4xl">প্রশ্নোত্তর</h2></div><div className="mt-10 space-y-3">{questions.map((item, index) => { const isOpen = open === index; const answerId = `faq-answer-${index}`; const questionId = `faq-question-${index}`; return <div key={item.question} className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-sm"><button id={questionId} type="button" aria-expanded={isOpen} aria-controls={answerId} onClick={() => setOpen(isOpen ? null : index)} className="flex min-h-16 w-full items-center justify-between gap-4 px-5 py-4 text-left font-bold text-blue-950 focus:outline-none focus:ring-4 focus:ring-inset focus:ring-blue-100 sm:px-6"><span>{item.question}</span><ChevronDown aria-hidden="true" size={20} className={`shrink-0 transition-transform duration-300 motion-reduce:transition-none ${isOpen ? 'rotate-180' : ''}`} /></button><div id={answerId} role="region" aria-labelledby={questionId} className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}><div className="min-h-0 overflow-hidden"><div className="border-t border-slate-100 px-5 py-4 leading-7 text-slate-600 sm:px-6">{item.answer}</div></div></div></div> })}</div></div></section>
+}
