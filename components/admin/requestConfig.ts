@@ -2,12 +2,10 @@ export type ServiceKey =
   | 'tuition'
   | 'printing'
   | 'admission'
-  | 'books'
   | 'education'
   | 'assignment'
   | 'contact'
   | 'helpers'
-  | 'study-groups'
 
 export type RequestConfig = {
   key: ServiceKey
@@ -24,7 +22,6 @@ export const REQUEST_CONFIGS: RequestConfig[] = [
   { key: 'tuition', label: 'টিউশন রিকোয়েস্ট', table: null, nameFields: ['name', 'full_name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
   { key: 'printing', label: 'প্রিন্টিং', table: 'print_orders', nameFields: ['name', 'full_name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
   { key: 'admission', label: 'ভর্তি পরামর্শ', table: 'admission_applications', nameFields: ['name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
-  { key: 'books', label: 'বই ও কোর্স', table: null, nameFields: ['name', 'full_name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
   { key: 'education', label: 'শিক্ষা পণ্য', table: null, nameFields: ['name', 'full_name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
   { key: 'assignment', label: 'অ্যাসাইনমেন্ট', table: 'assignment_requests', nameFields: ['name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
   { key: 'contact', label: 'যোগাযোগ বার্তা', table: null, nameFields: ['name', 'full_name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
@@ -32,7 +29,6 @@ export const REQUEST_CONFIGS: RequestConfig[] = [
 
 export const ADDITIONAL_REQUEST_CONFIGS: RequestConfig[] = [
   { key: 'helpers', label: 'হেল্পার আবেদন', table: 'helpers', nameFields: ['name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
-  { key: 'study-groups', label: 'স্টাডি গ্রুপ', table: 'study_groups', nameFields: ['name'], phoneFields: ['phone'], districtFields: ['district', 'area'], dateFields: ['created_at', 'updated_at'] },
 ]
 
 // export function getRequestConfig(key: string) {

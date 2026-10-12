@@ -13,6 +13,10 @@ export type Profile = {
   status?: 'pending' | 'approved' | 'rejected' | null
   subjects?: string[] | null
   district?: string | null
+  institution_type?: string | null
+  institution_name?: string | null
+  level?: string | null
+  birth_date?: string | null
   short_bio?: string | null
   photo_url?: string | null
 }
@@ -22,6 +26,7 @@ type AuthContextValue = {
   profile: Profile | null
   loading: boolean
   signOut: () => Promise<void>
+  refreshProfile: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -66,7 +71,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
-  return <AuthContext.Provider value={{ user, profile, loading, signOut }}>{children}</AuthContext.Provider>
+  // profile table theke abar data niye navbar shoho shob jaygay update kore
+  async function refreshProfile() {
+    if (!user) return
+    setProfile(await getProfile(user.id))
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {

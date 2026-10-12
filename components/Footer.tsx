@@ -1,11 +1,14 @@
 import Link from "next/link"
+import Image from 'next/image'
 
 export default function Footer() {
   return (
     <footer className="bg-gray-800 text-white mt-12">
       <div className="container mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <div className="text-2xl font-bold">Luvevo Tutor</div>
+          <Link href="/" className="flex shrink-0 items-center" aria-label="Luvevo Tutor">
+            <Image src="/logo/luvevo-full-dark.png" alt="Luvevo - Platform for All" width={500} height={200} className="h-16 w-auto object-contain sm:h-20" priority />
+          </Link>
           <p className="mt-2 text-gray-300">আপনার সব শিক্ষা প্রয়োজনের এক ঠিকানা।</p>
         </div>
 
@@ -24,9 +27,8 @@ export default function Footer() {
             <li><Link href="/tuition" className="hover:text-white hover:underline">Tuition Media</Link></li>
             <li><Link href="/printing" className="hover:text-white hover:underline">Printing</Link></li>
             <li><Link href="/admission-consultancy" className="hover:text-white hover:underline">Admission Service and Consultancy</Link></li>
-            <li><Link href="/book-course-affiliate" className="hover:text-white hover:underline">Book and Course Affiliate</Link></li>
             <li><Link href="/educational-product" className="hover:text-white hover:underline">Educational Product</Link></li>
-            <li><Link href="/assignment-project" className="hover:text-white hover:underline">Assignment and Project Work</Link></li>
+            <li><Link href="/assignment-project" className="hover:text-white hover:underline">Assignment Help and Sohayatri</Link></li>
             <li><Link href="/online-courses" className="hover:text-white hover:underline">Online Course and Tuition</Link></li>
           </ul>
         </div>
@@ -40,7 +42,7 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="bg-gray-900 text-gray-400 text-sm py-4 text-center">© 2026 Luvevo Tutor. All rights reserved.</div>
+      <div className="bg-gray-900 text-gray-400 text-sm py-4 text-center">© 2026 Luvevo Tutor. All rights reserved. <br /> Developed By FarJu IT [IT Department Of Luvevo] </div>
     </footer>
   )
 }

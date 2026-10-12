@@ -55,9 +55,8 @@ const services = [
   { label: 'Tuition Media', route: '/tuition' },
   { label: 'Printing', route: '/printing' },
   { label: 'Admission Service and Consultancy', route: '/admission-consultancy' },
-  { label: 'Book and Course Affiliate', route: '/book-course-affiliate' },
   { label: 'Educational Product', route: '/educational-product' },
-  { label: 'Assignment and Project Work', route: '/assignment-project' },
+  { label: 'অ্যাসাইনমেন্ট ও সহযাত্রী', route: '/assignment-project' },
   { label: 'Online Courses', route: '/online-courses' }
 ]
 
@@ -94,7 +93,7 @@ export default function Hero() {
         </h2>
         <div className={`mx-auto max-w-3xl transition-opacity ${showSearchBlock ? 'animate-fade-in-up opacity-100' : 'opacity-0'}`}>
           <p className="mt-4 leading-7 text-gray-600">
-            Luvevo Tutor <span className="font-semibold text-blue-900">প্রদান করে ৭ ধরনের সেবা</span> — <span className="font-semibold text-primary">টিউশন মার্কেটপ্লেস</span>, <span className="font-semibold text-orange-600">প্রিন্টিং</span>, <span className="font-semibold text-emerald-700">ভর্তি পরামর্শ</span>, <span className="font-semibold text-violet-700">বই ও কোর্স রিকমেন্ডেশন</span>, <span className="font-semibold text-cyan-700">শিক্ষা পণ্য</span>, <span className="font-semibold text-rose-700">অ্যাসাইনমেন্ট সহায়তা</span> এবং <span className="font-semibold text-indigo-700">অনলাইন কোর্স ও টিউশন</span>।
+            Luvevo Tutor <span className="font-semibold text-blue-900">প্রদান করে ৬ ধরনের সেবা</span> — <span className="font-semibold text-primary">টিউশন মার্কেটপ্লেস</span>, <span className="font-semibold text-orange-600">প্রিন্টিং</span>, <span className="font-semibold text-emerald-700">ভর্তি পরামর্শ</span>, <span className="font-semibold text-cyan-700">শিক্ষা পণ্য</span>, <span className="font-semibold text-rose-700">অ্যাসাইনমেন্ট সহায়তা ও সহযাত্রী</span> এবং <span className="font-semibold text-indigo-700">অনলাইন কোর্স ও টিউশন</span>।
           </p>
 
           <div className="mx-auto mt-6 flex max-w-2xl flex-col gap-2 rounded-xl bg-white p-2 shadow-lg ring-1 ring-slate-100 sm:p-3 md:flex-row">

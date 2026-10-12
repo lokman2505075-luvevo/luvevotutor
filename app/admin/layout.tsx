@@ -33,7 +33,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       const { count: pendingJobs } = await supabase.from('job_posts').select('id', { count: 'exact', head: true }).eq('status', 'pending')
       const { count: newApplications } = await supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'new')
       const { count: pendingReviews } = await supabase.from('guardian_reviews').select('id', { count: 'exact', head: true }).eq('is_approved', false)
-      setCounts({ ...Object.fromEntries(entries), jobs: pendingJobs ?? 0, 'job-applications': newApplications ?? 0, reviews: pendingReviews ?? 0 })
+      const { count: pendingProducts } = await supabase.from('products').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+      const { count: pendingSohojatri } = await supabase.from('study_groups').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+      const { count: openSohojatriReports } = await supabase.from('sohojatri_reports').select('id', { count: 'exact', head: true }).eq('status', 'open')
+      const { count: pendingAssignmentHelpers } = await supabase.from('assignment_helpers').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+      const { count: openAssignmentHelperReports } = await supabase.from('assignment_helper_reports').select('id', { count: 'exact', head: true }).eq('status', 'open')
+      setCounts({ ...Object.fromEntries(entries), jobs: pendingJobs ?? 0, 'job-applications': newApplications ?? 0, reviews: pendingReviews ?? 0, products: pendingProducts ?? 0, sohojatri: (pendingSohojatri ?? 0) + (openSohojatriReports ?? 0), 'assignment-helpers': (pendingAssignmentHelpers ?? 0) + (openAssignmentHelperReports ?? 0) })
     }
 
     void loadCounts()
@@ -84,6 +89,36 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <Link href="/admin/reviews" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/reviews' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
               <span>Guardian Reviews</span>
               {(counts.reviews ?? 0) > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{counts.reviews}</span>}
+            </Link>
+            <Link href="/admin/courses" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/courses' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>কোর্স অনুমোদন</span>
+            </Link>
+            <Link href="/admin/course-payments" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/course-payments' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>কোর্স পেমেন্ট</span>
+            </Link>
+            <Link href="/admin/tutors" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/tutors' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>টিউটর অনুমোদন</span>
+            </Link>
+            <Link href="/admin/products" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/products' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>মার্কেটপ্লেস পণ্য</span>
+              {(counts.products ?? 0) > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{counts.products}</span>}
+            </Link>
+            <Link href="/admin/marketplace-operations" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/marketplace-operations' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>মার্কেটপ্লেস অর্ডার / রিপোর্ট</span>
+            </Link>
+            <Link href="/admin/sohojatri" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/sohojatri' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>সহযাত্রী পরিচালনা</span>
+              {(counts.sohojatri ?? 0) > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{counts.sohojatri}</span>}
+            </Link>
+            <Link href="/admin/assignment-helpers" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/assignment-helpers' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>হেল্পার পরিচালনা</span>
+              {(counts['assignment-helpers'] ?? 0) > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{counts['assignment-helpers']}</span>}
+            </Link>
+            <Link href="/admin/education-support" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/education-support' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>শিক্ষা সহায়তা</span>
+            </Link>
+            <Link href="/admin/tutor-bookings" onClick={() => setMenuOpen(false)} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin/tutors' ? 'bg-blue-100 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <span>টিউটর বুকিং অনুমোদন</span>
             </Link>
           </nav>
           <Link href="/" className="mt-8 block rounded-lg border border-gray-200 px-3 py-2 text-center text-sm text-gray-600 hover:bg-gray-50">সাইটে ফিরে যান</Link>

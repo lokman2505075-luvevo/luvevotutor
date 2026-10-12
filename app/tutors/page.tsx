@@ -13,13 +13,21 @@ export const metadata: Metadata = { title: 'টিউটর খুঁজুন |
 export const dynamic = 'force-dynamic'
 const pageSize = 12
 
+const TUTOR_COLUMNS =
+  'id, full_name, photo_url, subjects, district, short_bio, created_at, rating, review_count, tutor_code, university, department, gender, present_area, permanent_address, medium, target_classes, expected_salary, salary_type, days_per_week, student_preference'
+
 type Props = { searchParams?: { district?: string; subject?: string; page?: string } }
 
 export default async function TutorsPage({ searchParams = {} }: Props) {
   const district = searchParams.district ?? ''
   const subject = searchParams.subject ?? ''
   const currentPage = Math.max(1, Number(searchParams.page ?? '1') || 1)
-  let query = supabase.from('public_tutors').select('id, full_name, photo_url, subjects, district, short_bio, created_at, rating, review_count', { count: 'exact' }).order('rating', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false }).range((currentPage - 1) * pageSize, currentPage * pageSize - 1)
+  let query = supabase
+    .from('public_tutors')
+    .select(TUTOR_COLUMNS, { count: 'exact' })
+    .order('rating', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
+    .range((currentPage - 1) * pageSize, currentPage * pageSize - 1)
   if (district) query = query.eq('district', district)
   if (subject) query = query.contains('subjects', [subject])
   const { data, error, count } = await query

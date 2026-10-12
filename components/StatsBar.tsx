@@ -10,9 +10,8 @@ const SERVICE_NAMES = [
   'Tuition Media',
   'Printing',
   'Admission Service and Consultancy',
-  'Book and Course Affiliate',
   'Educational Product',
-  'Assignment and Project Work',
+  'Assignment Help and Sohayatri',
   'Online Courses and Tuition'
 ]
 

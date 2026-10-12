@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 
 type UniversityRow = {
   id: string
+  slug: string | null
   name_bn: string
   name_en: string
   category: string
@@ -28,7 +29,7 @@ export default async function AdmissionConsultancyPage() {
     const supabase = createServerSupabaseClient()
     const { data, error } = await supabase
       .from('universities')
-      .select('*')
+      .select('id,slug,name_bn,name_en,category,college_code,circular_date,application_start,application_end,exam_date,exam_center,result,status,display_order,is_active')
       .eq('is_active', true)
       .order('category', { ascending: true })
       .order('display_order', { ascending: true })

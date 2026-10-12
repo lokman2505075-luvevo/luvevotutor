@@ -38,6 +38,7 @@ export default function TutorRequestForm({ tutor, onClose }: Props) {
       `অতিরিক্ত বার্তা: ${message.trim() || 'নেই'}`,
       selectedTutor,
     ].join('\n')
+    const { data: userData } = await supabase.auth.getUser()
     const { error: insertError } = await supabase.from('live_tuition_bookings').insert({
       name: name.trim(),
       phone: phone.trim(),
@@ -46,13 +47,15 @@ export default function TutorRequestForm({ tutor, onClose }: Props) {
       preferred_time: preferredTime.trim() || null,
       budget: budget.trim() || null,
       details,
+      tutor_id: tutor?.id ?? null,
+      student_id: userData.user?.id ?? null,
     })
     setSubmitting(false)
     if (insertError) return setError('রিকোয়েস্ট জমা দেওয়া যায়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।')
     setSubmitted(true)
   }
 
-  if (submitted) return <div className="rounded-2xl bg-green-50 p-8 text-center" aria-live="polite"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-700">✓</div><h2 className="mt-4 text-xl font-bold text-green-900">আপনার রিকোয়েস্ট জমা হয়েছে।</h2><p className="mt-2 text-sm leading-7 text-green-800">আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব। নিশ্চিত করার পর Luvevo আপনার সঙ্গে টিউটরের যোগাযোগের তথ্য শেয়ার করবে।</p>{onClose && <button type="button" onClick={onClose} className="mt-5 min-h-11 rounded-xl bg-primary px-5 py-2.5 font-semibold text-white">বন্ধ করুন</button>}</div>
+  if (submitted) return <div className="rounded-2xl bg-green-50 p-8 text-center" aria-live="polite"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-700">✓</div><h2 className="mt-4 text-xl font-bold text-green-900">আপনার রিকোয়েস্ট জমা হয়েছে।</h2><p className="mt-2 text-sm leading-7 text-green-800">আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব। অ্যাডমিন অ্যাপ্রুভ করার পর টিউটরের যোগাযোগের তথ্য আপনি টিউটরের প্রোফাইল পেজে দেখতে পাবেন।</p>{onClose && <button type="button" onClick={onClose} className="mt-5 min-h-11 rounded-xl bg-primary px-5 py-2.5 font-semibold text-white">বন্ধ করুন</button>}</div>
 
   return <form onSubmit={handleSubmit} className="space-y-5" noValidate>
     {tutor && <p className="rounded-xl bg-blue-50 p-3 text-sm font-semibold text-primary">নির্বাচিত টিউটর: {tutor.name}</p>}

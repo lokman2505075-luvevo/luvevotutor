@@ -1,12 +1,14 @@
 "use client"
 
 import { Fragment, useEffect, useRef, useState, type DragEvent, type FormEvent } from 'react'
+import Link from 'next/link'
 import Footer from '../Footer'
 import Navbar from '../Navbar'
 import { supabase } from '../../lib/supabaseClient'
 
 type UniversityRow = {
   id: string
+  slug: string | null
   name_bn: string
   name_en: string
   category: string
@@ -33,6 +35,7 @@ type Admission = {
   examCenter: string | null
   result: string | null
   status: string
+  slug: string | null
   admissionType?: 'MBBS' | 'BDS'
 }
 
@@ -71,6 +74,7 @@ function normalizeUniversityRows(rows: UniversityRow[]): Admission[] {
     examCenter: row.exam_center,
     result: row.result,
     status: row.status ?? 'সার্কুলারের অপেক্ষায়',
+    slug: row.slug,
     admissionType: row.category === 'bds' ? 'BDS' : row.category === 'medical' ? 'MBBS' : undefined,
   }))
 }
@@ -277,6 +281,7 @@ export default function AdmissionConsultancyClient({
   const inputClass = 'w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary focus:ring-2 focus:ring-blue-100'
 
   function renderAdmissionRow(item: Admission) {
+    const slug = item.slug?.trim()
     return (
       <tr key={item.university} className="border-b border-gray-100 bg-white hover:bg-blue-50/50">
         <td className="whitespace-nowrap px-4 py-4 font-semibold text-blue-950">{item.university}</td>
@@ -293,9 +298,16 @@ export default function AdmissionConsultancyClient({
           <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusClass(item.status)}`}>{item.status}</span>
         </td>
         <td className="whitespace-nowrap px-4 py-4">
-          <button type="button" onClick={() => handleApply(item.university)} className="rounded-lg bg-accent px-3 py-2 text-xs font-bold text-white hover:bg-yellow-600">
-            আবেদন করতে চাই
-          </button>
+          <div className="flex items-center gap-2">
+            {slug && (
+              <Link href={`/admission-consultancy/${encodeURIComponent(slug)}`} className="rounded-lg border border-primary px-3 py-2 text-xs font-bold text-primary hover:bg-blue-50">
+                বিস্তারিত
+              </Link>
+            )}
+            <button type="button" onClick={() => handleApply(item.university)} className="rounded-lg bg-accent px-3 py-2 text-xs font-bold text-white hover:bg-yellow-600">
+              আবেদন করতে চাই
+            </button>
+          </div>
         </td>
       </tr>
     )

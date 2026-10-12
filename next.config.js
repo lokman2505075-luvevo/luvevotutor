@@ -4,6 +4,15 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/book-course-affiliate',
+        destination: '/educational-product',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

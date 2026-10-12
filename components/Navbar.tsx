@@ -6,6 +6,8 @@ import { ChevronDown, Menu, X } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '../lib/AuthContext'
 import { useRole, type AudienceRole } from '../lib/useRole'
+import UserAvatar from './UserAvatar'
+import Image from 'next/image'
 
 type NavItem = { label: string; href?: string; children?: NavItem[] }
 
@@ -13,19 +15,20 @@ const services: NavItem[] = [
   { label: 'টিউশন মিডিয়া', href: '/tuition' },
   { label: 'প্রিন্টিং', href: '/printing' },
   { label: 'ভর্তি পরামর্শ ও কনসালটেন্সি', href: '/admission-consultancy' },
-  { label: 'বই ও কোর্স রিকমেন্ডেশন', href: '/book-course-affiliate' },
+  { label: 'শিক্ষা সহায়তা', href: '/education-support' },
   { label: 'শিক্ষা পণ্য', href: '/educational-product' },
-  { label: 'অ্যাসাইনমেন্ট ও প্রজেক্ট', href: '/assignment-project' },
+  { label: 'অ্যাসাইনমেন্ট ও সহযাত্রী', href: '/assignment-project' },
   { label: 'অনলাইন কোর্স ও টিউশন', href: '/online-courses' },
 ]
-const guardians: NavItem = { label: 'অভিভাবকদের জন্য', children: [{ label: 'টিউটর খুঁজুন', href: '/tutors' }, { label: 'টিউশন পোস্ট করুন', href: '/post-tuition' }] }
+const guardians: NavItem = { label: 'অভিভাবকদের জন্য', children: [{ label: 'টিউটর খুঁজুন', href: '/tutors' }, { label: 'টিউশন পোস্ট করুন', href: '/post-tuition'}, { label: 'আমার কোর্স', href: '/my-courses'} ] }
 const tutors: NavItem = { label: 'টিউটরদের জন্য', children: [{ label: 'টিউটর হিসেবে যুক্ত হোন', href: '/tutor-hub' }, { label: 'জব বোর্ড', href: '/job-board' }] }
 
 const commonItems: NavItem[] = [{ label: 'Home', href: '/' }, { label: 'Services', children: services }]
 const roleMenus: Record<AudienceRole, NavItem[]> = {
   guest: [...commonItems, guardians, tutors, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }],
-  guardian: [...commonItems, { label: 'টিউটর খুঁজুন', href: '/tutors' }, { label: 'টিউশন পোস্ট করুন', href: '/post-tuition' }, { label: 'আমার পোস্ট', href: '/my-posts' }, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }],
-  tutor: [...commonItems, { label: 'জব বোর্ড', href: '/job-board' }, { label: 'আমার আবেদন', href: '/my-applications' }, { label: 'আমার প্রোফাইল', href: '/profile' }, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }],
+  guardian: [...commonItems, { label: 'টিউটর খুঁজুন', href: '/tutors' }, { label: 'টিউশন পোস্ট করুন', href: '/post-tuition' }, { label: 'আমার পোস্ট', href: '/my-posts' }, { label: 'আমার কোর্স', href: '/my-courses'}, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }],
+  student: [{ label: 'হোম', href: '/' }, { label: 'সেবাসমূহ', children: services }, { label: 'টিউটর খুঁজুন', href: '/tutors' }, { label: 'আমার কোর্স', href: '/my-courses#courses' }, { label: 'আমার উপস্থিতি', href: '/my-courses#attendance' }, { label: 'আমার প্রোফাইল', href: '/profile' }, { label: 'পরিচিতি', href: '/about' }, { label: 'যোগাযোগ', href: '/contact' }],
+  tutor: [...commonItems, { label: 'জব বোর্ড', href: '/job-board' }, { label: 'আমার আবেদন', href: '/my-applications' }, { label: 'উপস্থিতি', href: '/profile#attendance' }, { label: 'আমার প্রোফাইল', href: '/profile' }, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }],
   admin: [...commonItems, guardians, tutors, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' }, { label: 'অ্যাডমিন প্যানেল', href: '/admin' }],
 }
 
@@ -52,15 +55,47 @@ export default function Navbar() {
     router.push('/')
   }
 
+  const displayName = profile?.full_name || user?.email || ''
+  const photoUrl = (profile as any)?.photo_url ?? null
+
   return <header className="bg-white shadow-sm">
     <div className="mx-auto flex min-h-20 max-w-[1500px] items-center justify-between gap-4 px-4 py-3 lg:px-6">
-      <Link href="/" className="shrink-0 text-xl font-bold text-primary sm:text-2xl">Luvevo Tutor</Link>
+      {/* Logo for Luvevo Tutor  */}
+     <Link href="/" className="flex shrink-0 items-center" aria-label="Luvevo Tutor">
+        <Image src="/logo/luvevo-full.png" alt="Luvevo - Platform for All" width={500} height={200} className="h-16 w-auto object-contain sm:h-20" priority />
+      </Link>
+
       {loading ? <div className="hidden h-10 flex-1 animate-pulse rounded-lg bg-slate-100 min-[1100px]:block" /> : <nav className="hidden flex-1 items-center justify-center gap-1 min-[1100px]:flex" aria-label="প্রধান নেভিগেশন">{items.map((item) => <NavEntry key={item.label} item={item} pathname={pathname} />)}</nav>}
       <div className="flex shrink-0 items-center gap-2">
-        {!loading && user ? <><span className="hidden max-w-32 truncate text-sm font-semibold text-primary min-[1100px]:inline">{profile?.full_name || user.email}</span><button type="button" onClick={handleLogout} className="hidden min-h-10 rounded-lg bg-accent px-3 py-2 text-sm font-bold text-white min-[1100px]:inline">লগআউট</button></> : !loading && <><Link href="/register" className="hidden rounded-lg px-3 py-2 text-sm font-semibold text-primary min-[1100px]:inline">Register</Link><Link href="/login" className="hidden rounded-lg bg-accent px-3 py-2 text-sm font-bold text-white min-[1100px]:inline">Login</Link></>}
+        {!loading && user ? <>
+          <Link href="/profile" className="hidden items-center gap-2 rounded-lg px-1 py-1 hover:bg-slate-50 min-[1100px]:flex" aria-label="আমার প্রোফাইল">
+            <UserAvatar name={displayName} photoUrl={photoUrl} size={36} />
+            <span className="max-w-32 truncate text-sm font-semibold text-primary">{displayName}</span>
+          </Link>
+          <button type="button" onClick={handleLogout} className="hidden min-h-10 rounded-lg bg-accent px-3 py-2 text-sm font-bold text-white min-[1100px]:inline">লগআউট</button>
+        </> : !loading && <>
+          <Link href="/register" className="hidden rounded-lg px-3 py-2 text-sm font-semibold text-primary min-[1100px]:inline">Register</Link>
+          <Link href="/login" className="hidden rounded-lg bg-accent px-3 py-2 text-sm font-bold text-white min-[1100px]:inline">Login</Link>
+        </>}
         <button type="button" className="rounded-lg p-2 text-primary min-[1100px]:hidden" onClick={() => setOpen((value) => !value)} aria-label={open ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'} aria-expanded={open}>{open ? <X size={24} /> : <Menu size={24} />}</button>
       </div>
     </div>
-    {open && !loading && <div className="border-t border-slate-100 min-[1100px]:hidden"><nav className="flex flex-col py-2" aria-label="মোবাইল নেভিগেশন">{items.map((item) => <NavEntry key={item.label} item={item} pathname={pathname} mobile />)}<div className="flex gap-2 px-4 py-4">{user ? <><span className="min-w-0 flex-1 truncate rounded-lg bg-blue-50 px-3 py-2 text-sm font-semibold text-primary">{profile?.full_name || user.email}</span><button type="button" onClick={handleLogout} className="rounded-lg bg-accent px-4 py-2 text-sm font-bold text-white">লগআউট</button></> : <><Link href="/register" className="flex-1 rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary">Register</Link><Link href="/login" className="flex-1 rounded-lg bg-accent px-3 py-2 text-center text-sm font-bold text-white">Login</Link></>}</div></nav></div>}
+    {open && !loading && <div className="border-t border-slate-100 min-[1100px]:hidden">
+      <nav className="flex flex-col py-2" aria-label="মোবাইল নেভিগেশন">
+        {items.map((item) => <NavEntry key={item.label} item={item} pathname={pathname} mobile />)}
+        <div className="flex gap-2 px-4 py-4">
+          {user ? <>
+            <Link href="/profile" onClick={() => setOpen(false)} className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-blue-50 px-3 py-2">
+              <UserAvatar name={displayName} photoUrl={photoUrl} size={32} />
+              <span className="truncate text-sm font-semibold text-primary">{displayName}</span>
+            </Link>
+            <button type="button" onClick={handleLogout} className="rounded-lg bg-accent px-4 py-2 text-sm font-bold text-white">লগআউট</button>
+          </> : <>
+            <Link href="/register" className="flex-1 rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary">Register</Link>
+            <Link href="/login" className="flex-1 rounded-lg bg-accent px-3 py-2 text-center text-sm font-bold text-white">Login</Link>
+          </>}
+        </div>
+      </nav>
+    </div>}
   </header>
 }
